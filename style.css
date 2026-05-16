@@ -705,6 +705,10 @@ body.light-mode .floating-card{
     background: rgba(255,255,255,0.04);
 
     transition: 0.4s;
+    margin-top: 40px;
+}
+.parent-container{
+    padding-top: 40px;
 }
 
 .hobby-card:hover{
