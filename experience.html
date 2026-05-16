@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Experience Creating a Portfolio Website</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --bg-body:       #100425;
+      --bg-card:        radial-gradient(circle at bottom left, rgba(224, 64, 251, 0.38), transparent 35%),
+                        radial-gradient(circle at top right, rgba(0, 229, 255, 0.30), transparent 35%),
+                        linear-gradient(145deg, #1a1730 0%, #12112b 60%, #0d1a2e 100%);
+      --card-border:   rgba(255,255,255,0.07);
+      --text-primary:  #e8e3f8;
+      --text-secondary:#b0a8d4;
+      --accent-pink:   #e040fb;
+      --accent-cyan:   #00e5ff;
+      --btn-bg:        rgba(255,255,255,0.07);
+      --btn-border:    rgba(255,255,255,0.15);
+      --btn-text:      #e8e3f8;
+      --btn-hover-bg:  rgba(255,255,255,0.14);
+      --timeline-line: linear-gradient(to bottom, var(--accent-cyan), var(--accent-pink));
+      --dot-color:     var(--accent-cyan);
+      --dot-color-end: var(--accent-pink);
+      --shadow:        0 8px 40px rgba(0,0,0,0.45);
+      --toggle-bg:     #2a2540;
+    }
+
+    [data-theme="light"] {
+      --bg-body:       #f0edf8;
+      --bg-card:        radial-gradient(circle at bottom left, rgba(196, 0, 232, 0.18), transparent 35%),
+                        radial-gradient(circle at top right, rgba(0, 122, 204, 0.22), transparent 35%),
+                        linear-gradient(145deg, #ffffff 0%, #f3eeff 60%, #e8f4ff 100%);
+      --card-border:   rgba(0,0,0,0.08);
+      --text-primary:  #1a1040;
+      --text-secondary:#5a4e7a;
+      --accent-pink:   #c400e8;
+      --accent-cyan:   #007acc;
+      --btn-bg:        rgba(0,0,0,0.05);
+      --btn-border:    rgba(0,0,0,0.12);
+      --btn-text:      #1a1040;
+      --btn-hover-bg:  rgba(0,0,0,0.1);
+      --timeline-line: linear-gradient(to bottom, var(--accent-cyan), var(--accent-pink));
+      --dot-color:     var(--accent-cyan);
+      --dot-color-end: var(--accent-pink);
+      --shadow:        0 8px 40px rgba(100,60,180,0.13);
+      --toggle-bg:     #e0d8f5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.5rem;
+    }
+
+    .btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+
+  background:
+    linear-gradient(var(--bg-body), var(--bg-body)) padding-box,
+    linear-gradient(90deg, #e040fb, #00e5ff) border-box;
+
+  color: var(--btn-text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+
+    .btn-back:hover { background: var(--btn-hover-bg); transform: translateX(-3px); color: var(--btn-text); }
+
+    .btn-toggle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+
+  background:
+    linear-gradient(var(--toggle-bg), var(--toggle-bg)) padding-box,
+    linear-gradient(135deg, #e040fb, #00e5ff) border-box;
+
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+  box-shadow: var(--shadow);
+}
+    .btn-toggle:hover { transform: scale(1.1) rotate(15deg); }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 2.5rem 2rem 2.5rem 3.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      transition: background 0.4s, box-shadow 0.4s;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.3rem);
+      font-weight: 700;
+      text-align: center;
+      background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 2rem;
+      line-height: 1.25;
+    }
+
+    .timeline-wrap {
+      position: absolute;
+      left: 1.2rem;
+      top: 4.5rem;
+      bottom: 2.5rem;
+      width: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .tl-dot-top, .tl-dot-bot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .tl-dot-top { background: var(--dot-color); box-shadow: 0 0 8px var(--dot-color); }
+    .tl-dot-bot { background: var(--dot-color-end); box-shadow: 0 0 8px var(--dot-color-end); }
+    .tl-line {
+      flex: 1;
+      width: 2px;
+      background: var(--timeline-line);
+      margin: 4px 0;
+      border-radius: 2px;
+    }
+
+    .article-body p {
+      color: var(--text-primary);
+      font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+      text-indent: 2em;
+      transition: color 0.4s;
+    }
+    .article-body p:last-child { margin-bottom: 0; }
+
+    @media (max-width: 576px) {
+      .content-card {
+        padding: 2rem 1rem 2rem 2.5rem;
+      }
+      .timeline-wrap { left: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-lg" style="max-width: 860px;">
+
+    
+    <nav class="top-nav">
+      <a href="index.html" class="btn-back">
+        <span>&#8592;</span> Back Home
+      </a>
+      <button class="btn-toggle" id="themeToggle" title="Toggle theme">🌙</button>
+    </nav>
+
+    
+    <div class="content-card">
+
+      <div class="timeline-wrap" aria-hidden="true">
+        <div class="tl-dot-top"></div>
+        <div class="tl-line"></div>
+        <div class="tl-dot-bot"></div>
+      </div>
+
+      
+      <h1 class="article-title">My Experience Creating a Portfolio Website</h1>
+      <div class="article-body">
+        <p>
+          Last week, I had an interesting experience creating my own portfolio website for a school project.
+          I felt excited and nervous because it was my first time making a complete website by myself.
+          I wanted to create a simple but attractive website to show my profile, hobbies, skills, and projects.
+        </p>
+        <p>
+          First, I searched for website design inspiration on the internet. I looked at different layouts,
+          colors, and animations to get ideas for my website. After that, I started creating the website
+          using HTML, CSS, and Bootstrap. I made several sections such as Home, About Me, Skills, Projects, and Contact.
+        </p>
+        <p>
+          While creating the website, I faced some difficulties. The navigation bar and some buttons did not
+          work properly. Besides that, the image layout looked messy and some text was not aligned correctly.
+          I felt confused at first, but I kept trying to fix the problems by watching tutorials and searching
+          for solutions on the internet.
+        </p>
+        <p>
+          After solving the problems, I added animations, pictures, icons, and personal information to make
+          the website more interesting. I also changed some colors and fonts so the design looked cleaner and
+          more modern. Then, I tested the website on my phone and computer to make sure the design looked good
+          and responsive on different screen sizes.
+        </p>
+        <p>
+          Finally, I successfully finished my portfolio website. I felt very proud because I gained a lot of
+          new experience in web design and coding. This experience taught me to be more patient, creative,
+          and confident. I hope I can create even better websites in the future.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const html   = document.documentElement;
+    const btn    = document.getElementById('themeToggle');
+    const ICONS  = { dark: '🌙', light: '☀️' };
+
+    // Init
+    let theme = localStorage.getItem('theme') || 'dark';
+    applyTheme(theme);
+
+    btn.addEventListener('click', () => {
+      theme = (theme === 'dark') ? 'light' : 'dark';
+      applyTheme(theme);
+      localStorage.setItem('theme', theme);
+    });
+
+    function applyTheme(t) {
+      html.setAttribute('data-theme', t);
+      btn.textContent = ICONS[t];
+    }
+  </script>
+</body>
+</html>
